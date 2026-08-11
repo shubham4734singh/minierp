@@ -19,9 +19,9 @@ MiniERP is a full-stack Enterprise Resource Planning solution tailored for small
 ## 🔗 Live Demo & API Documentation
 
 - **Frontend**: [Available upon deployment on Vercel]
-- **API Swagger Docs**: `/api-docs` (Append this route to your deployed backend URL or view locally)
+- **API Swagger Docs**: `/api/docs` (Append this route to your deployed backend URL or view locally)
 
-> **Note**: To test the APIs using Swagger, visit `/api-docs` on your live domain or `http://localhost:5000/api-docs` locally.
+> **Note**: To test the APIs using Swagger, visit `/api/docs` on your live domain or `http://localhost:5000/api/docs` locally.
 
 ## 🚀 Local Development Setup
 

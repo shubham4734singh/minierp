@@ -36,7 +36,7 @@ import { swaggerDocument } from './swagger';
 app.get('/api/swagger.json', (req: Request, res: Response) => {
   res.json(swaggerDocument);
 });
-app.get('/api-docs', (req: Request, res: Response) => {
+app.get('/api/docs', (req: Request, res: Response) => {
   res.send(`
     <!DOCTYPE html>
     <html lang="en">
