@@ -112,7 +112,7 @@ export const createChallan = async (req: AuthRequest, res: Response): Promise<vo
     res.status(201).json(result);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: (error as any).errors });
     } else {
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -138,7 +138,7 @@ export const getChallans = async (req: Request, res: Response): Promise<void> =>
 export const getChallanById = async (req: Request, res: Response): Promise<void> => {
   try {
     const challan = await prisma.salesChallan.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: {
         customer: true,
         items: true,
@@ -162,7 +162,7 @@ import { generateChallanPDF } from '../utils/pdfGenerator';
 export const exportChallanPDF = async (req: Request, res: Response): Promise<void> => {
   try {
     const challan = await prisma.salesChallan.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: {
         customer: true,
         items: true,
@@ -182,7 +182,7 @@ export const exportChallanPDF = async (req: Request, res: Response): Promise<voi
 
 export const updateChallanStatus = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const { status } = req.body;
     const userId = req.user!.id;
 

@@ -46,7 +46,7 @@ export const getCustomers = async (req: Request, res: Response): Promise<void> =
 export const getCustomerById = async (req: Request, res: Response): Promise<void> => {
   try {
     const customer = await prisma.customer.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: { salesChallans: true },
     });
 
@@ -75,7 +75,7 @@ export const createCustomer = async (req: Request, res: Response): Promise<void>
     res.status(201).json(customer);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: (error as any).errors });
     } else {
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -87,7 +87,7 @@ export const updateCustomer = async (req: Request, res: Response): Promise<void>
     const data = customerSchema.partial().parse(req.body);
 
     const customer = await prisma.customer.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: {
         ...data,
         followUpDate: data.followUpDate ? new Date(data.followUpDate) : undefined,
@@ -97,7 +97,7 @@ export const updateCustomer = async (req: Request, res: Response): Promise<void>
     res.json(customer);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: (error as any).errors });
     } else {
       res.status(500).json({ error: 'Internal server error' });
     }

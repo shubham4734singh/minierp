@@ -22,7 +22,7 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const { name, email, role, password } = req.body;
 
     const updateData: any = { name, email, role };
@@ -45,7 +45,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
   try {
     await prisma.user.delete({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
     });
     res.json({ message: 'User deleted successfully' });
   } catch (error) {

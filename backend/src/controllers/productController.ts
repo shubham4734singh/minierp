@@ -58,7 +58,7 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
 export const getProductById = async (req: Request, res: Response): Promise<void> => {
   try {
     const product = await prisma.product.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: {
         stockMovements: {
           orderBy: { createdAt: 'desc' },
@@ -99,7 +99,7 @@ export const createProduct = async (req: AuthRequest, res: Response): Promise<vo
     res.status(201).json(product);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: (error as any).errors });
     } else {
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -111,14 +111,14 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
     const data = productSchema.partial().parse(req.body);
 
     const product = await prisma.product.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data,
     });
 
     res.json(product);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: (error as any).errors });
     } else {
       console.error("UPDATE PRODUCT ERROR:", error);
       res.status(500).json({ error: 'Internal server error' });
@@ -135,7 +135,7 @@ const stockMovementSchema = z.object({
 export const adjustStock = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { quantity, type, reason } = stockMovementSchema.parse(req.body);
-    const productId = req.params.id;
+    const productId = String(req.params.id);
 
     if (!req.user) {
       res.status(401).json({ error: 'Unauthorized' });
@@ -179,7 +179,7 @@ export const adjustStock = async (req: AuthRequest, res: Response): Promise<void
     res.json({ message: 'Stock adjusted successfully', product: updatedProduct });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: (error as any).errors });
     } else {
       res.status(500).json({ error: 'Internal server error' });
     }
