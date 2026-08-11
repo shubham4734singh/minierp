@@ -58,6 +58,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/challans', challanRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/users', userRoutes);
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'success', message: 'API is running beautifully!' });
 });
