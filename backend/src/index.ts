@@ -29,18 +29,12 @@ app.use('/api/challans', challanRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', userRoutes);
-import http from 'http';
-import { initSocket } from './socket';
+// Removed http and socket
 
 // ... (other imports)
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'success', message: 'API is running beautifully!' });
 });
 
-const server = http.createServer(app);
-initSocket(server);
-
-// Start Server
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Export for Vercel Serverless Functions
+export default app;

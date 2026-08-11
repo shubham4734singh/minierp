@@ -107,17 +107,7 @@ export const createChallan = async (req: AuthRequest, res: Response): Promise<vo
       return challan;
     });
 
-    const io = require('../socket').getIO();
-    if (io) {
-      io.emit('new_challan', {
-        message: `New Sales Challan ${challanNumber} created by Admin`,
-        challanId: result.id,
-        challanNumber: result.challanNumber
-      });
-      if (data.status === ChallanStatus.CONFIRMED) {
-        io.emit('stock_updated');
-      }
-    }
+    // Socket removed for Vercel
 
     res.status(201).json(result);
   } catch (error) {
@@ -276,10 +266,7 @@ export const updateChallanStatus = async (req: AuthRequest, res: Response): Prom
       });
     });
 
-    const io = require('../socket').getIO();
-    if (io && (status === ChallanStatus.CONFIRMED || status === ChallanStatus.CANCELLED)) {
-      io.emit('stock_updated');
-    }
+    // Socket removed for Vercel
 
     res.json(updatedChallan);
   } catch (error: any) {

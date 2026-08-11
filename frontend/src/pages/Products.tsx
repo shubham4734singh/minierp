@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
-import { socket } from '../lib/socket';
+// Socket removed
 import { Plus, Search, Package, Trash2, X, Download, Edit2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { downloadCSV } from '../lib/exportCsv';
@@ -62,17 +62,7 @@ export default function Products() {
   const canEdit = user.role === 'ADMIN' || user.role === 'WAREHOUSE';
   const canDelete = user.role === 'ADMIN';
 
-  useEffect(() => {
-    const handleStockUpdate = () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
-    };
-    
-    socket.on('stock_updated', handleStockUpdate);
-    
-    return () => {
-      socket.off('stock_updated', handleStockUpdate);
-    };
-  }, [queryClient]);
+  // Socket removed
 
 
 

@@ -3,7 +3,7 @@ import { useNavigate, Link, useLocation, useOutlet } from 'react-router-dom';
 import { Users, Package, FileText, LogOut, LayoutDashboard, Search, Bell, PackageSearch, ChevronRight, UserCog, ShieldAlert } from 'lucide-react';
 import { Toaster, toast } from 'react-hot-toast';
 import ThemeToggle from './ThemeToggle';
-import { socket } from '../lib/socket';
+// Socket removed
 import CmdKMenu from './CmdKMenu';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -25,21 +25,7 @@ export default function Layout() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    socket.on('new_challan', (data) => {
-      toast.success(data.message, {
-        style: {
-          borderRadius: '10px',
-          background: '#111',
-          color: '#fff',
-        },
-      });
-    });
-
-    return () => {
-      socket.off('new_challan');
-    };
-  }, []);
+  // Socket removed
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
