@@ -19,6 +19,23 @@ export const swaggerDocument = {
   },
   security: [{ bearerAuth: [] }],
   paths: {
+    "/auth/register": {
+      post: {
+        summary: "Register new user",
+        security: [],
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: { name: { type: "string" }, email: { type: "string" }, password: { type: "string" }, role: { type: "string", enum: ["ADMIN", "SALES", "WAREHOUSE", "ACCOUNTS"] } }
+              }
+            }
+          }
+        },
+        responses: { 201: { description: "Created" } }
+      }
+    },
     "/auth/login": {
       post: {
         summary: "Login user",
