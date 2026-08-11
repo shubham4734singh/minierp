@@ -4,6 +4,8 @@
 
 The MiniERP system is a full-stack, enterprise-grade application engineered to streamline business operations for small and medium-sized enterprises. The platform centralizes critical business workflows, including robust inventory management, multi-tier customer relationship management (CRM), and end-to-end sales challan processing. It provides a secure, role-based environment that facilitates data integrity and operational efficiency across different administrative and staff layers.
 
+**Live Project URL:** [https://minierp.shubhamcybersky.in/](https://minierp.shubhamcybersky.in/)
+
 ---
 
 ## 2. System Architecture
@@ -92,6 +94,8 @@ The backend exposes a comprehensive RESTful API conforming to OpenAPI 3.0 specif
 
 ### 5.1 Interactive Documentation
 The API documentation is accessible via the live deployment at `/api/docs`. This Swagger UI instance provides a graphical interface detailing request schemas, response models, and required authentication headers. It allows developers to interact with the production database dynamically.
+
+**Live API Documentation:** [https://minierp.shubhamcybersky.in/api/docs](https://minierp.shubhamcybersky.in/api/docs)
 
 ### 5.2 Core Endpoints (Summary)
 - **Auth:** `POST /api/auth/login`, `POST /api/auth/register`
