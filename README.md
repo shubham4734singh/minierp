@@ -1,51 +1,87 @@
-# Mini ERP + CRM Operations Portal
+# MiniERP 🚀
 
-A complete Full-Stack solution for a wholesale/distribution company, designed to manage Customers, Products, Stock Movements, and Sales Challans.
+MiniERP is a full-stack Enterprise Resource Planning solution tailored for small and medium-sized businesses. It includes a beautiful React frontend and a robust Node.js backend.
 
-## 🚀 Quick Start (Docker)
+## 🌟 Features
 
-The absolute fastest way to run this project is using Docker Compose.
+- **Product & Inventory Management**: Track stock levels, SKUs, and categories.
+- **Customer Management**: Manage retail, wholesale, and distributor details.
+- **Sales Challans**: Generate, confirm, and export sales challans as PDFs.
+- **Interactive Dashboard**: View real-time analytics and statistics.
+- **Role-based Authentication**: Secure JWT-based access for Admin and Staff users.
 
-1. Start the application:
-   ```bash
-   docker-compose up --build
-   ```
-2. The application will be available at:
-   - **Frontend**: http://localhost:5173
-   - **Backend API**: http://localhost:5000
+## 🛠️ Tech Stack
 
-## 🔑 Test Login Credentials
+- **Frontend**: React, Vite, Tailwind CSS, Lucide Icons, Axios.
+- **Backend**: Node.js, Express, Prisma (ORM), PostgreSQL (Supabase), Zod, PDFKit.
+- **Deployment**: Configured out of the box for serverless deployment on Vercel.
 
-The following users are pre-configured. **Password for all: `password123`**
+## 🔗 Live Demo & API Documentation
 
-- **Admin**: `admin@erp.com`
-- **Sales**: `sales@erp.com`
-- **Warehouse**: `warehouse@erp.com`
-- **Accounts**: `accounts@erp.com`
+- **Frontend**: [Available upon deployment on Vercel]
+- **API Swagger Docs**: `/api-docs` (Append this route to your deployed backend URL or view locally)
 
-## 💻 Manual Setup
+> **Note**: To test the APIs using Swagger, visit `/api-docs` on your live domain or `http://localhost:5000/api-docs` locally.
 
-If you prefer to run it manually without Docker:
+## 🚀 Local Development Setup
 
-### 1. Database
-Set up a PostgreSQL database and configure the URL in `backend/.env`.
+### 1. Database Setup
+1. Create a PostgreSQL project on [Supabase](https://supabase.com/).
+2. Get your connection string (Session pooled URI) from Supabase dashboard.
 
-### 2. Backend
+### 2. Backend Setup
 ```bash
 cd backend
 npm install
-npx prisma db push
+```
+
+Create a `.env` file in the `backend` folder:
+```env
+DATABASE_URL="your-supabase-connection-string"
+JWT_SECRET="super-secret-key-for-dev"
+PORT=5000
+```
+
+Initialize the database:
+```bash
 npx prisma generate
-npm run seed
+npx prisma db push
+npx tsx prisma/seed.ts # Creates default admin user
+```
+
+Start the backend:
+```bash
 npm run dev
 ```
 
-### 3. Frontend
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
+```
+
+Create a `.env` file in the `frontend` folder:
+```env
+VITE_API_URL="http://localhost:5000/api"
+```
+
+Start the frontend:
+```bash
 npm run dev
 ```
 
-## 📚 API Testing
-A `Mini_ERP_Postman_Collection.json` file is included in the root directory. You can import this into Postman to test the backend API endpoints.
+### Default Login
+- **Email**: `admin@erp.com`
+- **Password**: `admin123`
+
+## 📦 Deployment (Vercel)
+
+The project includes a `vercel.json` configured to host both the Vite frontend and Express backend on a single Vercel project seamlessly.
+
+1. Push your code to GitHub.
+2. Import the project in Vercel.
+3. Ensure the **Framework Preset** is set to `Vite`.
+4. Add the `DATABASE_URL` and `JWT_SECRET` environment variables in Vercel.
+5. Deploy!
+
+*Ensure you run `npx tsx prisma/seed.ts` locally connected to your production database to create the initial admin user.*
