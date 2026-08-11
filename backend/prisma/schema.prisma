@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// 1. Authentication and Roles Module
+// ==========================================
+enum Role {
+  ADMIN
+  SALES
+  WAREHOUSE
+  ACCOUNTS
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name             String
+  role             Role     @default(SALES)
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  challansCreated      SalesChallan[]
+  stockMovements       StockMovementLog[]
+  auditLogs            AuditLog[]
+}
+
+// ==========================================
+// 2. Customer CRM Module
+// ==========================================
+enum CustomerType {
+  RETAIL
+  WHOLESALE
+  DISTRIBUTOR
+}
+
+enum CustomerStatus {
+  LEAD
+  ACTIVE
+  INACTIVE
+}
+
+model Customer {
+  id            String         @id @default(uuid())
+  name          String
+  mobile        String
+  email         String?
+  businessName  String?
+  gstNumber     String?
+  type          CustomerType   @default(RETAIL)
+  address       String?
+  status        CustomerStatus @default(LEAD)
+  followUpDate  DateTime?
+  notes         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  // Relations
+  salesChallans SalesChallan[]
+}
+
+// ==========================================
+// 3. Product and Inventory Module
+// ==========================================
+model Product {
+  id               String   @id @default(uuid())
+  name             String
+  sku              String   @unique
+  category         String
+  unitPrice        Float
+  currentStock     Int      @default(0)
+  minStockAlert    Int      @default(10)
+  location         String?
+  description      String?
+  imageUrl         String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  stockMovements   StockMovementLog[]
+}
+
+enum MovementType {
+  IN
+  OUT
+}
+
+model StockMovementLog {
+  id           String       @id @default(uuid())
+  productId    String
+  quantity     Int
+  type         MovementType
+  reason       String?
+  createdById  String
+  createdAt    DateTime     @default(now())
+
+  // Relations
+  product      Product      @relation(fields: [productId], references: [id])
+  createdBy    User         @relation(fields: [createdById], references: [id])
+}
+
+// ==========================================
+// 4. Sales Challan Module
+// ==========================================
+enum ChallanStatus {
+  DRAFT
+  CONFIRMED
+  CANCELLED
+}
+
+model SalesChallan {
+  id             String        @id @default(uuid())
+  challanNumber  String        @unique
+  customerId     String
+  status         ChallanStatus @default(DRAFT)
+  totalQuantity  Int           @default(0)
+  createdById    String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Relations
+  customer       Customer      @relation(fields: [customerId], references: [id])
+  createdBy      User          @relation(fields: [createdById], references: [id])
+  items          ChallanItem[]
+}
+
+// Challan items store product snapshot data
+model ChallanItem {
+  id               String       @id @default(uuid())
+  challanId        String
+  productId        String       // Storing ID, but also snapshot data below
+  productName      String       // Snapshot of product name at the time of challan
+  productSku       String       // Snapshot of product SKU
+  unitPrice        Float        // Snapshot of price
+  quantity         Int
+  createdAt        DateTime     @default(now())
+
+  // Relations
+  challan          SalesChallan @relation(fields: [challanId], references: [id], onDelete: Cascade)
+}
+
+// ==========================================
+// 5. System Audit Logs
+// ==========================================
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String
+  entityType  String
+  entityId    String
+  userId      String
+  details     String?
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id])
+}

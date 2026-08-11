@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: erp-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    command: >
+      sh -c "npx prisma db push && npx prisma db seed && npm run dev"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: erp-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    depends_on:
+      - backend
