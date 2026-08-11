@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation, useOutlet } from 'react-router-dom';
 import { Users, Package, FileText, LogOut, LayoutDashboard, Search, Bell, PackageSearch, ChevronRight, UserCog, ShieldAlert } from 'lucide-react';
-import { Toaster, toast } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import ThemeToggle from './ThemeToggle';
 // Socket removed
 import CmdKMenu from './CmdKMenu';
