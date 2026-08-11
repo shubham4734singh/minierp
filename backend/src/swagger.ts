@@ -6,8 +6,7 @@ export const swaggerDocument = {
     description: "API documentation for MiniERP system"
   },
   servers: [
-    { url: "/api", description: "Vercel Production API" },
-    { url: "http://localhost:5000/api", description: "Local Development API" }
+    { url: "/api", description: "Vercel Production API" }
   ],
   components: {
     securitySchemes: {
