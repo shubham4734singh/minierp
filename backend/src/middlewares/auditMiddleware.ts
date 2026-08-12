@@ -12,18 +12,25 @@ export const auditLogMiddleware = (req: AuthRequest, res: Response, next: NextFu
 
   res.on('finish', async () => {
     if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method) && res.statusCode >= 200 && res.statusCode < 300) {
-      if (req.user && req.user.id) {
+      const url = req.originalUrl || req.url;
+      let isAuth = url.includes('auth');
+      
+      let userId = req.user?.id;
+      if (isAuth && res.locals.body?.user?.id) {
+          userId = res.locals.body.user.id;
+      }
+
+      if (userId) {
         let action = 'CREATE';
         if (req.method === 'PUT' || req.method === 'PATCH') action = 'UPDATE';
         if (req.method === 'DELETE') action = 'DELETE';
 
         let entityType = 'UNKNOWN';
-        const url = req.originalUrl || req.url;
         if (url.includes('customers')) entityType = 'CUSTOMER';
         else if (url.includes('products')) entityType = 'PRODUCT';
         else if (url.includes('challans')) entityType = 'CHALLAN';
         else if (url.includes('users')) entityType = 'USER';
-        else if (url.includes('auth')) entityType = 'AUTH';
+        else if (isAuth) entityType = 'AUTH';
 
         const pathParts = url.split('/').filter(Boolean);
         let entityId = 'SYSTEM';
@@ -44,13 +51,18 @@ export const auditLogMiddleware = (req: AuthRequest, res: Response, next: NextFu
            }
         }
 
+        if (isAuth) {
+           if (url.includes('login')) action = 'LOGIN';
+           else if (url.includes('register')) action = 'REGISTER';
+        }
+
         try {
           await prisma.auditLog.create({
             data: {
               action,
               entityType,
               entityId: String(entityId),
-              userId: req.user.id,
+              userId: userId,
               details: `${action} operation on ${entityType}`,
             }
           });
