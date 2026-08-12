@@ -44,10 +44,13 @@ app.get('/api/docs', (req: Request, res: Response) => {
   `);
 });
 
+import { auditLogMiddleware } from './middlewares/auditMiddleware';
+
 // Middleware
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(auditLogMiddleware);
 
 import authRoutes from './routes/authRoutes';
 import customerRoutes from './routes/customerRoutes';
