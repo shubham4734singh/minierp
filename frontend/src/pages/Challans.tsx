@@ -44,7 +44,7 @@ export default function Challans() {
   useEffect(() => {
     fetchChallans();
     api.get('/customers').then(res => setCustomers(res.data));
-    api.get('/products').then(res => setProducts(res.data));
+    api.get('/products').then(res => setProducts(res.data.data || res.data));
   }, []);
 
   const filteredChallans = challans.filter(c => 
